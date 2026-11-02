@@ -34,4 +34,4 @@ jobs:
           region: westeurope
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           template: ./parentModules/application/main.bicep
-          parameters: ./input/dev/dev.application.params.json
+          parameters: ./input/dev.application.params.json
