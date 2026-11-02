@@ -1,6 +1,5 @@
 targetScope = 'subscription'
 
-param environmentName string
 param location string
 param resourceGroupName string
 param virtualNetworkName string

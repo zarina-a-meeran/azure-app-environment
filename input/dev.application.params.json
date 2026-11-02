@@ -6,7 +6,7 @@
       "value": "dev"
     },
     "location": {
-      "value": "westeurope"
+      "value": "uksouth"
     },
     "resourceGroupName": {
       "value": "rg-dev-application"
