@@ -1,0 +1,21 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "uksouth"
+    },
+    "resourceGroupName": {
+      "value": "rg-test-application"
+    },
+    "virtualNetworkName": {
+      "value": "vnet-test-application"
+    },
+    "addressPrefix": {
+      "value": "10.20.0.0/16"
+    },
+    "subnetPrefix": {
+      "value": "10.20.1.0/24"
+    }
+  }
+}

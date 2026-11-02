@@ -3,6 +3,14 @@ name: Deploy Azure Application Environment
 
 on:
   workflow_dispatch:
+    inputs:
+      environmentName:
+        description: 'Enter environment name'
+        required: true
+        type: choice
+        options:
+          - dev
+          - test
 
 permissions:
   id-token: write
@@ -14,11 +22,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Download repository files
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Step 2: Login to Azure
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -26,7 +32,6 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      # Step 3: Deploy parent Bicep
       - name: Deploy Application
         uses: azure/arm-deploy@v2
         with:
@@ -34,4 +39,4 @@ jobs:
           region: uksouth
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           template: ./parentModules/application/main.bicep
-          parameters: ./input/dev.application.params.json
+          parameters: ./input/${{ inputs.environmentName }}.application.params.json
