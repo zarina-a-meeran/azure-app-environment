@@ -1,0 +1,37 @@
+
+name: Deploy Azure Application Environment
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy Application Infrastructure
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Download repository files
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Login to Azure
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      # Step 3: Deploy parent Bicep
+      - name: Deploy Application
+        uses: azure/arm-deploy@v2
+        with:
+          scope: subscription
+          region: westeurope
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          template: ./parentModules/application/main.bicep
+          parameters: ./input/dev/dev.application.params.json

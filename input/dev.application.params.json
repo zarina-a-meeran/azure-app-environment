@@ -1,0 +1,24 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environmentName": {
+      "value": "dev"
+    },
+    "location": {
+      "value": "westeurope"
+    },
+    "resourceGroupName": {
+      "value": "rg-dev-application"
+    },
+    "virtualNetworkName": {
+      "value": "vnet-dev-application"
+    },
+    "addressPrefix": {
+      "value": "10.10.0.0/16"
+    },
+    "subnetPrefix": {
+      "value": "10.10.1.0/24"
+    }
+  }
+}
