@@ -11,13 +11,27 @@ on:
         options:
           - dev
           - test
+      operation:
+        description: 'Choose what to do'
+        required: true
+        type: choice
+        options:
+          - deploy
+          - delete
 
 permissions:
   id-token: write
   contents: read
 
+env:
+  solutionName: Azure-Application-Environment
+  templateFile: ./parentModules/application/main.bicep
+  inputPath: ./input/
+  deploymentLocation: uksouth
+
 jobs:
   deploy:
+    if: inputs.operation == 'deploy'
     name: Deploy Application Infrastructure
     runs-on: ubuntu-latest
 
@@ -36,7 +50,29 @@ jobs:
         uses: azure/arm-deploy@v2
         with:
           scope: subscription
-          region: uksouth
+          region: ${{ env.deploymentLocation }}
           subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          template: ./parentModules/application/main.bicep
-          parameters: ./input/${{ inputs.environmentName }}.application.params.json
+          template: ${{ env.templateFile }}
+          parameters: ${{ env.inputPath }}${{ inputs.environmentName }}.application.params.json
+
+  delete:
+    name: Delete Application Infrastructure
+    if: inputs.operation == 'delete'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Delete Resource Group
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            az group delete \
+              --name rg-${{ inputs.environmentName }}-application \
+              --yes \
+              --no-wait
